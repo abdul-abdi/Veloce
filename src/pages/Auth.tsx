@@ -84,6 +84,7 @@ const Auth = () => {
             overflow: 'hidden',
             minHeight: 600,
             display: 'flex',
+            flexDirection: isLogin ? 'row' : 'row-reverse',
             borderRadius: 4,
             background: theme.palette.mode === 'dark'
               ? 'linear-gradient(145deg, rgba(26, 26, 26, 0.8), rgba(18, 18, 18, 0.9))'
@@ -93,6 +94,18 @@ const Auth = () => {
             boxShadow: theme.palette.mode === 'dark'
               ? '0 8px 32px rgba(0, 0, 0, 0.3)'
               : '0 8px 32px rgba(0, 0, 0, 0.1)',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: theme.palette.mode === 'dark'
+                ? 'radial-gradient(circle at top right, rgba(255, 255, 255, 0.1), transparent 70%)'
+                : 'radial-gradient(circle at top right, rgba(0, 0, 0, 0.05), transparent 70%)',
+              pointerEvents: 'none',
+            },
           }}
         >
           <AnimatePresence mode="wait">
@@ -116,37 +129,85 @@ const Auth = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <Typography
-                  variant="h4"
-                  gutterBottom
-                  sx={{
-                    fontWeight: 700,
-                    mb: 1,
-                    background: theme.palette.mode === 'dark'
-                      ? 'linear-gradient(45deg, #fff 30%, #ccc 90%)'
-                      : 'linear-gradient(45deg, #000 30%, #333 90%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                  }}
-                >
-                  {isLogin ? 'Welcome Back' : 'Create Account'}
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    mb: 4,
-                    color: theme.palette.text.secondary,
-                    maxWidth: 400,
-                  }}
-                >
-                  {isLogin
-                    ? 'Sign in to access your account and explore our premium car collection.'
-                    : 'Join us to discover exclusive car deals and personalized recommendations.'}
-                </Typography>
+                <Box sx={{ mb: 4 }}>
+                  <Typography
+                    variant="h3"
+                    gutterBottom
+                    sx={{
+                      fontWeight: 800,
+                      mb: 1,
+                      fontSize: { xs: '2rem', sm: '2.5rem' },
+                      background: theme.palette.mode === 'dark'
+                        ? 'linear-gradient(45deg, #fff 30%, #ccc 90%)'
+                        : 'linear-gradient(45deg, #000 30%, #333 90%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                    }}
+                  >
+                    {isLogin ? 'Welcome Back' : 'Create Account'}
+                  </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      mb: 2,
+                      color: theme.palette.text.secondary,
+                      maxWidth: 400,
+                      fontSize: { xs: '1rem', sm: '1.1rem' },
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {isLogin
+                      ? 'Sign in to access your account and explore our premium car collection.'
+                      : 'Join us to discover exclusive car deals and personalized recommendations.'}
+                  </Typography>
+                  {!isLogin && (
+                    <Box sx={{ mt: 2 }}>
+                      <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.4 }}
+                        >
+                          ✓
+                        </motion.div>
+                        Access to exclusive deals and offers
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.5 }}
+                        >
+                          ✓
+                        </motion.div>
+                        Personalized car recommendations
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.6 }}
+                        >
+                          ✓
+                        </motion.div>
+                        Save favorite cars and searches
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
               </motion.div>
 
               {error && (
-                <Alert severity="error" sx={{ mb: 3 }}>
+                <Alert 
+                  severity="error" 
+                  sx={{ 
+                    mb: 3,
+                    borderRadius: 2,
+                    '& .MuiAlert-icon': {
+                      fontSize: '1.5rem'
+                    }
+                  }}
+                >
                   {error}
                 </Alert>
               )}
@@ -174,6 +235,12 @@ const Auth = () => {
                               </InputAdornment>
                             ),
                           }}
+                          sx={{
+                            '& .MuiOutlinedInput-root': {
+                              borderRadius: 2,
+                              bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.02)',
+                            }
+                          }}
                         />
                         <TextField
                           required
@@ -188,6 +255,12 @@ const Auth = () => {
                                 <Phone sx={{ color: theme.palette.primary.main }} />
                               </InputAdornment>
                             ),
+                          }}
+                          sx={{
+                            '& .MuiOutlinedInput-root': {
+                              borderRadius: 2,
+                              bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.02)',
+                            }
                           }}
                         />
                       </Stack>
@@ -214,6 +287,12 @@ const Auth = () => {
                               <Email sx={{ color: theme.palette.primary.main }} />
                             </InputAdornment>
                           ),
+                        }}
+                        sx={{
+                          '& .MuiOutlinedInput-root': {
+                            borderRadius: 2,
+                            bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.02)',
+                          }
                         }}
                       />
                       <TextField
@@ -242,6 +321,12 @@ const Auth = () => {
                             </InputAdornment>
                           ),
                         }}
+                        sx={{
+                          '& .MuiOutlinedInput-root': {
+                            borderRadius: 2,
+                            bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.02)',
+                          }
+                        }}
                       />
                     </Stack>
                   </motion.div>
@@ -260,6 +345,7 @@ const Auth = () => {
                           textAlign: 'right',
                           color: theme.palette.primary.main,
                           textDecoration: 'none',
+                          fontWeight: 500,
                           '&:hover': {
                             textDecoration: 'underline',
                           },
@@ -282,19 +368,22 @@ const Auth = () => {
                       size="large"
                       sx={{
                         mt: 2,
-                        py: 1.5,
+                        py: 1.8,
                         borderRadius: 2,
                         textTransform: 'none',
                         fontSize: '1.1rem',
                         fontWeight: 600,
+                        background: theme.palette.mode === 'dark'
+                          ? 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)'
+                          : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
                         boxShadow: theme.palette.mode === 'dark'
-                          ? '0 4px 12px rgba(0, 0, 0, 0.4)'
-                          : '0 4px 12px rgba(0, 0, 0, 0.1)',
+                          ? '0 4px 12px rgba(33, 150, 243, 0.4)'
+                          : '0 4px 12px rgba(33, 150, 243, 0.2)',
                         '&:hover': {
                           transform: 'translateY(-2px)',
                           boxShadow: theme.palette.mode === 'dark'
-                            ? '0 6px 16px rgba(0, 0, 0, 0.5)'
-                            : '0 6px 16px rgba(0, 0, 0, 0.15)',
+                            ? '0 6px 16px rgba(33, 150, 243, 0.5)'
+                            : '0 6px 16px rgba(33, 150, 243, 0.3)',
                         },
                         transition: 'all 0.3s ease-in-out',
                       }}
@@ -315,6 +404,7 @@ const Auth = () => {
                           sx={{
                             px: 2,
                             color: theme.palette.text.secondary,
+                            fontWeight: 500,
                           }}
                         >
                           Or continue with
@@ -333,13 +423,20 @@ const Auth = () => {
                         size="large"
                         startIcon={<Google />}
                         sx={{
-                          py: 1.5,
+                          py: 1.8,
                           borderRadius: 2,
                           textTransform: 'none',
+                          fontSize: '1rem',
+                          fontWeight: 500,
                           borderWidth: 2,
                           '&:hover': {
                             borderWidth: 2,
+                            transform: 'translateY(-2px)',
+                            boxShadow: theme.palette.mode === 'dark'
+                              ? '0 4px 12px rgba(0, 0, 0, 0.3)'
+                              : '0 4px 12px rgba(0, 0, 0, 0.1)',
                           },
+                          transition: 'all 0.3s ease-in-out',
                         }}
                       >
                         Google
@@ -350,13 +447,20 @@ const Auth = () => {
                         size="large"
                         startIcon={<Apple />}
                         sx={{
-                          py: 1.5,
+                          py: 1.8,
                           borderRadius: 2,
                           textTransform: 'none',
+                          fontSize: '1rem',
+                          fontWeight: 500,
                           borderWidth: 2,
                           '&:hover': {
                             borderWidth: 2,
+                            transform: 'translateY(-2px)',
+                            boxShadow: theme.palette.mode === 'dark'
+                              ? '0 4px 12px rgba(0, 0, 0, 0.3)'
+                              : '0 4px 12px rgba(0, 0, 0, 0.1)',
                           },
+                          transition: 'all 0.3s ease-in-out',
                         }}
                       >
                         Apple
@@ -395,65 +499,69 @@ const Auth = () => {
               position: 'relative',
               overflow: 'hidden',
               display: { xs: 'none', md: 'block' },
-              borderRadius: '0 4px 4px 0',
+              borderRadius: isLogin ? '0 4px 4px 0' : '4px 0 0 4px',
             }}
           >
-            <motion.div
-              animate={{
-                x: isLogin ? '0%' : '-100%',
-                opacity: 1,
-              }}
-              transition={{ duration: 0.5, ease: 'easeInOut' }}
-              style={{
+            <Box
+              sx={{
                 position: 'absolute',
-                width: '200%',
+                width: '100%',
                 height: '100%',
+                background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url(${isLogin ? 'https://images.unsplash.com/photo-1583121274602-3e2820c69888' : 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7'}?auto=format&fit=crop&w=1000)`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
                 display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: 4,
+                color: 'white',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%)',
+                },
               }}
             >
-              <Box
-                sx={{
-                  flex: 1,
-                  background: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(https://images.unsplash.com/photo-1494905998402-395d579af36f?auto=format&fit=crop&w=1000)`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  padding: 4,
-                  color: 'white',
-                }}
-              >
-                <Typography variant="h4" sx={{ fontWeight: 700, mb: 2, textAlign: 'center' }}>
-                  Welcome to VELOCE
-                </Typography>
-                <Typography variant="body1" sx={{ textAlign: 'center', maxWidth: 400 }}>
-                  Experience luxury and performance with our premium car collection.
-                </Typography>
+              <Box sx={{ position: 'relative', zIndex: 1 }}>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <Typography 
+                    variant="h3" 
+                    sx={{ 
+                      fontWeight: 800, 
+                      mb: 2, 
+                      textAlign: 'center',
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                      fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
+                    }}
+                  >
+                    {isLogin ? 'Welcome to VELOCE' : 'Join Our Community'}
+                  </Typography>
+                  <Typography 
+                    variant="h6" 
+                    sx={{ 
+                      textAlign: 'center', 
+                      maxWidth: 400, 
+                      mx: 'auto',
+                      textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
+                      lineHeight: 1.6
+                    }}
+                  >
+                    {isLogin 
+                      ? 'Experience luxury and performance with our premium car collection.'
+                      : 'Create an account to unlock exclusive deals and personalized recommendations.'}
+                  </Typography>
+                </motion.div>
               </Box>
-              <Box
-                sx={{
-                  flex: 1,
-                  background: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1000)`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  padding: 4,
-                  color: 'white',
-                }}
-              >
-                <Typography variant="h4" sx={{ fontWeight: 700, mb: 2, textAlign: 'center' }}>
-                  Join Our Community
-                </Typography>
-                <Typography variant="body1" sx={{ textAlign: 'center', maxWidth: 400 }}>
-                  Create an account to unlock exclusive deals and personalized recommendations.
-                </Typography>
-              </Box>
-            </motion.div>
+            </Box>
           </Box>
         </Paper>
       </Container>
