@@ -16,7 +16,6 @@ import {
   TextField,
   InputAdornment,
   Slider,
-  FormControl,
   FormGroup,
   FormControlLabel,
   Checkbox,
@@ -32,16 +31,13 @@ import {
 import {
   Search,
   FilterList,
-  Favorite,
   FavoriteBorder,
   CompareArrows,
   Sort,
   Clear,
   DirectionsCar,
   LocalGasStation,
-  Speed,
   Settings,
-  AttachMoney,
   Close,
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -401,8 +397,8 @@ const CarListing = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handlePriceRangeChange = (event: Event, newValue: number | number[]) => {
-    setPriceRange(newValue as number[]);
+  const handlePriceRangeChange = (_: Event, newValue: number | number[]) => {
+    setPriceRange(Array.isArray(newValue) ? newValue : [newValue, newValue]);
   };
 
   const handleFilterChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {

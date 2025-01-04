@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Container,
@@ -113,13 +113,11 @@ const carData = {
 };
 
 const CarDetails = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [value, setValue] = useState(0);
-  const [isAdded, setIsAdded] = useState(false);
 
   // Find the car from the sample data
   const car = carData;
@@ -150,8 +148,6 @@ const CarDetails = () => {
       price: car.price,
       image: car.image,
     }));
-    setIsAdded(true);
-    setTimeout(() => setIsAdded(false), 2000);
   };
 
   return (
@@ -367,7 +363,7 @@ const CarDetails = () => {
                 >
                   <Tabs
                     value={value}
-                    onChange={(event, newValue) => setValue(newValue)}
+                    onChange={(_, newValue) => setValue(newValue)}
                     centered
                     variant={isMobile ? 'fullWidth' : 'standard'}
                     sx={{

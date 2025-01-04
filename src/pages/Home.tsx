@@ -12,10 +12,8 @@ import {
   Paper,
   Stack,
   Rating,
-  Avatar,
   Chip,
   IconButton,
-  Divider,
 } from '@mui/material';
 import {
   Speed,
@@ -24,16 +22,13 @@ import {
   LocalShipping,
   Star,
   DirectionsCar,
-  AttachMoney,
-  CheckCircle,
   ArrowForward,
   LocalOffer,
   Favorite,
   CompareArrows,
   Search,
-  ShoppingCart,
 } from '@mui/icons-material';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {

@@ -13,8 +13,6 @@ import {
   Drawer,
   List,
   ListItem,
-  ListItemText,
-  ListItemIcon,
   Badge,
   Tooltip,
 } from '@mui/material';
@@ -30,7 +28,7 @@ import {
   DarkMode,
 } from '@mui/icons-material';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { RootState } from '../features/store';
 import { useThemeMode } from '../theme/ThemeContext';
