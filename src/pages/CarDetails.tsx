@@ -196,7 +196,13 @@ const CarDetails = () => {
             >
               <ArrowBack />
             </IconButton>
-            <Typography variant="h4" component="h1">
+            <Typography 
+              variant={isMobile ? "h5" : "h4"} 
+              component="h1"
+              sx={{ 
+                fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' }
+              }}
+            >
               Car Details
             </Typography>
           </Stack>
@@ -224,7 +230,7 @@ const CarDetails = () => {
                     position: 'relative',
                     '& img': {
                       width: '100%',
-                      height: { xs: '300px', sm: '400px', md: '500px' },
+                      height: { xs: '250px', sm: '350px', md: '450px', lg: '500px' },
                       objectFit: 'cover',
                       display: 'block',
                       transition: 'transform 0.3s ease-in-out',
@@ -269,10 +275,24 @@ const CarDetails = () => {
                     borderRadius: theme.shape.borderRadius,
                   }}
                 >
-                  <Typography variant="h3" component="h2" gutterBottom>
+                  <Typography 
+                    variant={isMobile ? "h4" : "h3"} 
+                    component="h2" 
+                    gutterBottom
+                    sx={{
+                      fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.75rem' }
+                    }}
+                  >
                     {car.name}
                   </Typography>
-                  <Typography variant="h4" color="primary" gutterBottom>
+                  <Typography 
+                    variant={isMobile ? "h5" : "h4"} 
+                    color="primary" 
+                    gutterBottom
+                    sx={{
+                      fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' }
+                    }}
+                  >
                     ${car.price.toLocaleString()}
                   </Typography>
                   <Stack direction="row" spacing={1} sx={{ mb: 3 }}>
@@ -287,7 +307,7 @@ const CarDetails = () => {
                         <Paper
                           elevation={2}
                           sx={{
-                            p: 2,
+                            p: { xs: 1.5, sm: 2 },
                             textAlign: 'center',
                             height: '100%',
                             transition: 'transform 0.2s',

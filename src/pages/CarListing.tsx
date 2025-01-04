@@ -414,8 +414,24 @@ const CarListing = () => {
   };
 
   const FilterDrawerContent = () => (
-    <Box sx={{ width: 280, p: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+    <Box sx={{ 
+      width: isMobile ? '100%' : 280, 
+      p: { xs: 2, sm: 3 },
+      height: isMobile ? 'auto' : '100%',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        mb: { xs: 2, sm: 3 },
+        position: 'sticky',
+        top: 0,
+        bgcolor: theme.palette.background.paper,
+        zIndex: 1,
+        py: 1
+      }}>
         <Typography variant="h6" color="text.primary" sx={{ fontWeight: 600 }}>
           Filters
         </Typography>
@@ -433,134 +449,98 @@ const CarListing = () => {
         </IconButton>
       </Box>
 
-      <Typography variant="subtitle1" gutterBottom color="text.primary" sx={{ fontWeight: 500 }}>
-        Price Range
-      </Typography>
-      <Box sx={{ px: 2, mb: 4 }}>
-        <Slider
-          value={priceRange}
-          onChange={handlePriceRangeChange}
-          valueLabelDisplay="auto"
-          min={0}
-          max={200000}
-          step={5000}
-          valueLabelFormat={(value) => `$${value.toLocaleString()}`}
-          sx={{
-            '& .MuiSlider-thumb': {
-              '&:hover, &.Mui-focusVisible': {
-                boxShadow: `0 0 0 8px ${theme.palette.mode === 'dark'
-                  ? 'rgba(255, 255, 255, 0.16)'
-                  : 'rgba(0, 0, 0, 0.16)'}`,
+      <Box sx={{ 
+        flexGrow: 1, 
+        overflowY: 'auto',
+        pb: isMobile ? 8 : 0 
+      }}>
+        <Typography variant="subtitle1" gutterBottom color="text.primary" sx={{ fontWeight: 500 }}>
+          Price Range
+        </Typography>
+        <Box sx={{ px: { xs: 1, sm: 2 }, mb: 4 }}>
+          <Slider
+            value={priceRange}
+            onChange={handlePriceRangeChange}
+            valueLabelDisplay="auto"
+            min={0}
+            max={200000}
+            step={5000}
+            valueLabelFormat={(value) => `$${value.toLocaleString()}`}
+            sx={{
+              '& .MuiSlider-thumb': {
+                width: { xs: 20, sm: 24 },
+                height: { xs: 20, sm: 24 },
+                '&:hover, &.Mui-focusVisible': {
+                  boxShadow: `0 0 0 8px ${theme.palette.mode === 'dark'
+                    ? 'rgba(255, 255, 255, 0.16)'
+                    : 'rgba(0, 0, 0, 0.16)'}`,
+                },
               },
-            },
-          }}
-        />
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
-          <Typography variant="body2" color="text.secondary">
-            ${priceRange[0].toLocaleString()}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            ${priceRange[1].toLocaleString()}
-          </Typography>
+            }}
+          />
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
+            <Typography variant="body2" color="text.secondary">
+              ${priceRange[0].toLocaleString()}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              ${priceRange[1].toLocaleString()}
+            </Typography>
+          </Box>
         </Box>
+
+        {/* Filter Sections */}
+        {[
+          { title: 'Fuel Type', options: ['electric', 'hybrid', 'petrol', 'diesel'] },
+          { title: 'Transmission', options: ['automatic', 'manual'] },
+          { title: 'Condition', options: ['new', 'used'] },
+        ].map((section, index) => (
+          <Box key={section.title} sx={{ mb: 3 }}>
+            <Typography variant="subtitle1" gutterBottom color="text.primary" sx={{ fontWeight: 500 }}>
+              {section.title}
+            </Typography>
+            <FormGroup>
+              {section.options.map((option) => (
+                <FormControlLabel
+                  key={option}
+                  control={
+                    <Checkbox
+                      checked={filters[option as keyof typeof filters]}
+                      onChange={handleFilterChange(option)}
+                      sx={{
+                        '&.Mui-checked': {
+                          color: theme.palette.primary.main,
+                        },
+                      }}
+                    />
+                  }
+                  label={option.charAt(0).toUpperCase() + option.slice(1)}
+                  sx={{
+                    '& .MuiFormControlLabel-label': {
+                      color: theme.palette.text.primary,
+                      fontSize: { xs: '0.9rem', sm: '1rem' },
+                    },
+                    py: { xs: 0.5, sm: 0.75 },
+                  }}
+                />
+              ))}
+            </FormGroup>
+          </Box>
+        ))}
       </Box>
 
-      <Typography variant="subtitle1" gutterBottom color="text.primary" sx={{ fontWeight: 500 }}>
-        Fuel Type
-      </Typography>
-      <FormGroup sx={{ mb: 3 }}>
-        {[
-          { label: 'Electric', value: 'electric' },
-          { label: 'Hybrid', value: 'hybrid' },
-          { label: 'Petrol', value: 'petrol' },
-          { label: 'Diesel', value: 'diesel' },
-        ].map((option) => (
-          <FormControlLabel
-            key={option.value}
-            control={
-              <Checkbox
-                checked={filters[option.value as keyof typeof filters]}
-                onChange={handleFilterChange(option.value)}
-                sx={{
-                  '&.Mui-checked': {
-                    color: theme.palette.primary.main,
-                  },
-                }}
-              />
-            }
-            label={option.label}
-            sx={{
-              '& .MuiFormControlLabel-label': {
-                color: theme.palette.text.primary,
-              },
-            }}
-          />
-        ))}
-      </FormGroup>
-
-      <Typography variant="subtitle1" gutterBottom color="text.primary" sx={{ fontWeight: 500 }}>
-        Transmission
-      </Typography>
-      <FormGroup sx={{ mb: 3 }}>
-        {[
-          { label: 'Automatic', value: 'automatic' },
-          { label: 'Manual', value: 'manual' },
-        ].map((option) => (
-          <FormControlLabel
-            key={option.value}
-            control={
-              <Checkbox
-                checked={filters[option.value as keyof typeof filters]}
-                onChange={handleFilterChange(option.value)}
-                sx={{
-                  '&.Mui-checked': {
-                    color: theme.palette.primary.main,
-                  },
-                }}
-              />
-            }
-            label={option.label}
-            sx={{
-              '& .MuiFormControlLabel-label': {
-                color: theme.palette.text.primary,
-              },
-            }}
-          />
-        ))}
-      </FormGroup>
-
-      <Typography variant="subtitle1" gutterBottom color="text.primary" sx={{ fontWeight: 500 }}>
-        Condition
-      </Typography>
-      <FormGroup sx={{ mb: 3 }}>
-        {[
-          { label: 'New', value: 'new' },
-          { label: 'Used', value: 'used' },
-        ].map((option) => (
-          <FormControlLabel
-            key={option.value}
-            control={
-              <Checkbox
-                checked={filters[option.value as keyof typeof filters]}
-                onChange={handleFilterChange(option.value)}
-                sx={{
-                  '&.Mui-checked': {
-                    color: theme.palette.primary.main,
-                  },
-                }}
-              />
-            }
-            label={option.label}
-            sx={{
-              '& .MuiFormControlLabel-label': {
-                color: theme.palette.text.primary,
-              },
-            }}
-          />
-        ))}
-      </FormGroup>
-
-      <Box sx={{ display: 'flex', gap: 2 }}>
+      <Box sx={{ 
+        display: 'flex', 
+        gap: 2,
+        mt: 2,
+        position: isMobile ? 'fixed' : 'relative',
+        bottom: isMobile ? 0 : 'auto',
+        left: isMobile ? 0 : 'auto',
+        right: isMobile ? 0 : 'auto',
+        p: isMobile ? 2 : 0,
+        bgcolor: theme.palette.background.paper,
+        borderTop: isMobile ? `1px solid ${theme.palette.divider}` : 'none',
+        width: isMobile ? '100%' : 'auto',
+      }}>
         <Button
           variant="outlined"
           fullWidth
@@ -611,7 +591,7 @@ const CarListing = () => {
       <Box
         sx={{
           position: 'relative',
-          height: 240,
+          height: { xs: 200, sm: 220, md: 240 },
           background: theme.palette.mode === 'dark'
             ? 'linear-gradient(45deg, #000000 0%, #1a1a1a 100%)'
             : 'linear-gradient(45deg, #ffffff 0%, #f8f8f8 100%)',
@@ -638,6 +618,7 @@ const CarListing = () => {
             justifyContent: 'center',
             position: 'relative',
             zIndex: 1,
+            px: { xs: 2, sm: 3, md: 4 },
           }}
         >
           <motion.div
@@ -651,6 +632,9 @@ const CarListing = () => {
               sx={{
                 color: theme.palette.text.primary,
                 fontWeight: 700,
+                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+                lineHeight: { xs: 1.2, sm: 1.3 },
+                mb: { xs: 1, sm: 2 },
               }}
             >
               Find Your Perfect Car
@@ -660,6 +644,8 @@ const CarListing = () => {
               sx={{
                 color: theme.palette.text.secondary,
                 maxWidth: 600,
+                fontSize: { xs: '1rem', sm: '1.25rem', md: '1.5rem' },
+                lineHeight: { xs: 1.4, sm: 1.5 },
               }}
             >
               Browse our extensive collection of premium vehicles
@@ -669,11 +655,11 @@ const CarListing = () => {
       </Box>
 
       {/* Search and Filter Section */}
-      <Container maxWidth="lg" sx={{ mt: -4, position: 'relative', zIndex: 2 }}>
+      <Container maxWidth="lg" sx={{ mt: { xs: -2, sm: -3, md: -4 }, position: 'relative', zIndex: 2 }}>
         <Paper
           elevation={0}
           sx={{
-            p: 3,
+            p: { xs: 2, sm: 2.5, md: 3 },
             background: theme.palette.mode === 'dark'
               ? 'linear-gradient(145deg, #1a1a1a, #121212)'
               : 'linear-gradient(145deg, #ffffff, #f8f8f8)',
@@ -681,7 +667,7 @@ const CarListing = () => {
             border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
           }}
         >
-          <Grid container spacing={2} alignItems="center">
+          <Grid container spacing={{ xs: 1, sm: 2 }} alignItems="center">
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -713,6 +699,7 @@ const CarListing = () => {
                     },
                   },
                 }}
+                sx={{ mb: { xs: 1, md: 0 } }}
               />
             </Grid>
             <Grid item xs={6} md={3}>
@@ -722,13 +709,14 @@ const CarListing = () => {
                 startIcon={<Sort />}
                 onClick={handleSortClick}
                 sx={{
-                  height: '100%',
+                  height: { xs: '45px', md: '100%' },
                   borderWidth: 2,
                   borderRadius: 2,
                   '&:hover': { borderWidth: 2 },
+                  fontSize: { xs: '0.875rem', sm: 'inherit' }
                 }}
               >
-                Sort By: {sortOptions.find(option => option.value === sortBy)?.label}
+                {isMobile ? 'Sort' : `Sort By: ${sortOptions.find(option => option.value === sortBy)?.label}`}
               </Button>
               <Menu
                 anchorEl={anchorEl}
@@ -737,7 +725,7 @@ const CarListing = () => {
                 PaperProps={{
                   sx: {
                     mt: 1,
-                    minWidth: 180,
+                    minWidth: { xs: 140, sm: 180 },
                     background: theme.palette.mode === 'dark'
                       ? 'linear-gradient(145deg, #1a1a1a, #121212)'
                       : 'linear-gradient(145deg, #ffffff, #f8f8f8)',
@@ -752,7 +740,9 @@ const CarListing = () => {
                     onClick={() => handleSortSelect(option.value)}
                     selected={sortBy === option.value}
                     sx={{
-                      py: 1.5,
+                      py: { xs: 1, sm: 1.5 },
+                      px: { xs: 1.5, sm: 2 },
+                      fontSize: { xs: '0.875rem', sm: 'inherit' },
                       '&.Mui-selected': {
                         backgroundColor: theme.palette.mode === 'dark'
                           ? 'rgba(255, 255, 255, 0.1)'
@@ -777,15 +767,16 @@ const CarListing = () => {
                 startIcon={<FilterList />}
                 onClick={() => setFilterDrawerOpen(true)}
                 sx={{
-                  height: '100%',
+                  height: { xs: '45px', md: '100%' },
                   borderRadius: 2,
                   boxShadow: 'none',
                   '&:hover': {
                     boxShadow: 'none',
                   },
+                  fontSize: { xs: '0.875rem', sm: 'inherit' }
                 }}
               >
-                Filters {Object.values(filters).filter(Boolean).length > 0 && `(${Object.values(filters).filter(Boolean).length})`}
+                {isMobile ? 'Filter' : `Filters ${Object.values(filters).filter(Boolean).length > 0 ? `(${Object.values(filters).filter(Boolean).length})` : ''}`}
               </Button>
             </Grid>
           </Grid>
@@ -793,7 +784,7 @@ const CarListing = () => {
       </Container>
 
       {/* Car Listings */}
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <Container maxWidth="lg" sx={{ mt: { xs: 2, sm: 3, md: 4 } }}>
         <AnimatePresence mode="wait">
           {isLoading ? (
             <Box
@@ -848,7 +839,7 @@ const CarListing = () => {
           ) : (
             <Grid container spacing={3}>
               {filteredCars.map((car, index) => (
-                <Grid item xs={12} sm={6} md={4} key={car.id}>
+                <Grid item xs={12} sm={6} md={4} key={index}>
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -867,7 +858,7 @@ const CarListing = () => {
                         border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
                         transition: 'all 0.3s ease-in-out',
                         '&:hover': {
-                          transform: 'translateY(-8px)',
+                          transform: isMobile ? 'none' : 'translateY(-8px)',
                           boxShadow: theme.palette.mode === 'dark'
                             ? '0 8px 30px rgba(0, 0, 0, 0.5)'
                             : '0 8px 30px rgba(0, 0, 0, 0.1)',
@@ -876,7 +867,7 @@ const CarListing = () => {
                     >
                       <CardMedia
                         component="img"
-                        height="240"
+                        height={isMobile ? "200" : "240"}
                         image={car.image}
                         alt={car.name}
                         sx={{
@@ -887,16 +878,18 @@ const CarListing = () => {
                       <Box
                         sx={{
                           position: 'absolute',
-                          top: 12,
-                          right: 12,
+                          top: { xs: 8, sm: 12 },
+                          right: { xs: 8, sm: 12 },
                           display: 'flex',
-                          gap: 1,
+                          gap: { xs: 0.5, sm: 1 },
                         }}
                       >
                         <Tooltip title="Add to Favorites">
                           <IconButton
                             sx={{
                               bgcolor: 'background.paper',
+                              width: { xs: 32, sm: 40 },
+                              height: { xs: 32, sm: 40 },
                               '&:hover': {
                                 bgcolor: 'background.paper',
                                 transform: 'scale(1.1)',
@@ -904,7 +897,7 @@ const CarListing = () => {
                               transition: 'transform 0.2s ease-in-out',
                             }}
                           >
-                            <FavoriteBorder />
+                            <FavoriteBorder sx={{ fontSize: { xs: 18, sm: 24 } }} />
                           </IconButton>
                         </Tooltip>
                         <Tooltip title={selectedCars.includes(car.id) ? 'Remove from Compare' : 'Add to Compare'}>
@@ -913,6 +906,8 @@ const CarListing = () => {
                             sx={{
                               bgcolor: selectedCars.includes(car.id) ? 'primary.main' : 'background.paper',
                               color: selectedCars.includes(car.id) ? 'common.white' : 'inherit',
+                              width: { xs: 32, sm: 40 },
+                              height: { xs: 32, sm: 40 },
                               '&:hover': {
                                 bgcolor: selectedCars.includes(car.id) ? 'primary.dark' : 'background.paper',
                                 transform: 'scale(1.1)',
@@ -920,22 +915,32 @@ const CarListing = () => {
                               transition: 'transform 0.2s ease-in-out',
                             }}
                           >
-                            <CompareArrows />
+                            <CompareArrows sx={{ fontSize: { xs: 18, sm: 24 } }} />
                           </IconButton>
                         </Tooltip>
                       </Box>
-                      <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                          <Typography variant="h6" component="h3" color="text.primary" sx={{ fontWeight: 600 }}>
+                      <CardContent sx={{ flexGrow: 1, p: { xs: 2, sm: 3 } }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: { xs: 1, sm: 2 } }}>
+                          <Typography 
+                            variant="h6" 
+                            component="h3" 
+                            color="text.primary" 
+                            sx={{ 
+                              fontWeight: 600,
+                              fontSize: { xs: '1rem', sm: '1.25rem' },
+                              lineHeight: 1.2,
+                            }}
+                          >
                             {car.name}
                           </Typography>
                           <Chip
                             label={car.category}
                             color="primary"
-                            size="small"
+                            size={isMobile ? "small" : "medium"}
                             sx={{
                               borderRadius: 1,
                               fontWeight: 500,
+                              fontSize: { xs: '0.75rem', sm: '0.875rem' },
                             }}
                           />
                         </Box>
@@ -1007,14 +1012,16 @@ const CarListing = () => {
       {/* Compare Fab */}
       {selectedCars.length > 0 && (
         <Fab
-          variant="extended"
+          variant={isMobile ? "circular" : "extended"}
           color="primary"
           sx={{
             position: 'fixed',
-            bottom: 24,
-            right: 24,
+            bottom: { xs: 16, sm: 24 },
+            right: { xs: 16, sm: 24 },
             zIndex: 1000,
-            borderRadius: 3,
+            borderRadius: isMobile ? '50%' : 3,
+            minHeight: { xs: 48, sm: 56 },
+            width: isMobile ? 48 : 'auto',
             boxShadow: theme.palette.mode === 'dark'
               ? '0 4px 20px rgba(0, 0, 0, 0.5)'
               : '0 4px 20px rgba(0, 0, 0, 0.1)',
@@ -1026,8 +1033,11 @@ const CarListing = () => {
           }}
           onClick={() => navigate('/compare')}
         >
-          <CompareArrows sx={{ mr: 1 }} />
-          Compare ({selectedCars.length})
+          <CompareArrows sx={{ 
+            mr: isMobile ? 0 : 1,
+            fontSize: { xs: 24, sm: 28 }
+          }} />
+          {!isMobile && `Compare (${selectedCars.length})`}
         </Fab>
       )}
 

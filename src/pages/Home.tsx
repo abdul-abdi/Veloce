@@ -14,6 +14,7 @@ import {
   Rating,
   Chip,
   IconButton,
+  useMediaQuery,
 } from '@mui/material';
 import {
   Speed,
@@ -34,6 +35,7 @@ import { useNavigate } from 'react-router-dom';
 const Home = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [currentPhrase, setCurrentPhrase] = useState(0);
   const phrases = [
     'Luxury at Your Fingertips',
@@ -102,6 +104,7 @@ const Home = () => {
           minHeight: '100vh',
           display: 'flex',
           alignItems: 'center',
+          paddingTop: { xs: '80px', sm: '100px' },
           background: theme.palette.mode === 'dark'
             ? 'linear-gradient(45deg, #000000 0%, #1a1a1a 100%)'
             : 'linear-gradient(45deg, #ffffff 0%, #f8f8f8 100%)',
@@ -119,8 +122,22 @@ const Home = () => {
           },
         }}
       >
-        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
-          <Grid container spacing={4} alignItems="center">
+        <Container 
+          maxWidth="lg" 
+          sx={{ 
+            position: 'relative', 
+            zIndex: 1,
+            py: { xs: 4, sm: 6, md: 8 },
+          }}
+        >
+          <Grid 
+            container 
+            spacing={{ xs: 4, md: 6 }} 
+            alignItems="center"
+            sx={{
+              minHeight: { xs: 'calc(100vh - 80px)', sm: 'calc(100vh - 100px)' },
+            }}
+          >
             <Grid item xs={12} md={6}>
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
@@ -133,6 +150,8 @@ const Home = () => {
                   sx={{
                     fontWeight: 900,
                     mb: 2,
+                    fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4rem' },
+                    lineHeight: { xs: 1.2, sm: 1.3 },
                     background: theme.palette.mode === 'dark'
                       ? 'linear-gradient(45deg, #00bcd4, #62efff)'
                       : 'linear-gradient(45deg, #0097a7, #4dd0e1)',
@@ -154,6 +173,8 @@ const Home = () => {
                     sx={{
                       mb: 3,
                       color: theme.palette.text.primary,
+                      fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
+                      lineHeight: { xs: 1.3, sm: 1.4 },
                     }}
                   >
                     {phrases[currentPhrase]}
@@ -165,20 +186,27 @@ const Home = () => {
                     mb: 4,
                     color: theme.palette.text.secondary,
                     maxWidth: 500,
+                    fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
+                    lineHeight: { xs: 1.5, sm: 1.6 },
                   }}
                 >
                   Discover our exclusive collection of premium vehicles.
                   Experience luxury, performance, and unmatched service.
                 </Typography>
-                <Stack direction="row" spacing={2}>
+                <Stack 
+                  direction={{ xs: 'column', sm: 'row' }} 
+                  spacing={{ xs: 2, sm: 2 }}
+                  sx={{ width: { xs: '100%', sm: 'auto' } }}
+                >
                   <Button
                     variant="contained"
                     size="large"
                     onClick={() => navigate('/cars')}
+                    fullWidth={isMobile}
                     sx={{
-                      py: 2,
-                      px: 4,
-                      fontSize: '1.1rem',
+                      py: { xs: 1.5, sm: 2 },
+                      px: { xs: 3, sm: 4 },
+                      fontSize: { xs: '1rem', sm: '1.1rem' },
                     }}
                   >
                     Explore Collection
@@ -187,10 +215,11 @@ const Home = () => {
                     variant="outlined"
                     size="large"
                     onClick={() => navigate('/contact')}
+                    fullWidth={isMobile}
                     sx={{
-                      py: 2,
-                      px: 4,
-                      fontSize: '1.1rem',
+                      py: { xs: 1.5, sm: 2 },
+                      px: { xs: 3, sm: 4 },
+                      fontSize: { xs: '1rem', sm: '1.1rem' },
                       borderWidth: 2,
                       '&:hover': {
                         borderWidth: 2,
@@ -395,8 +424,15 @@ const Home = () => {
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 6 }}>
-            <Typography variant="h2" color="text.primary">
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 6, flexDirection: { xs: 'column', sm: 'row' }, gap: { xs: 2, sm: 0 } }}>
+            <Typography 
+              variant="h2" 
+              color="text.primary"
+              sx={{
+                fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' },
+                textAlign: { xs: 'center', sm: 'left' }
+              }}
+            >
               Featured Vehicles
             </Typography>
             <Button
@@ -408,6 +444,7 @@ const Home = () => {
                 '&:hover': {
                   borderWidth: 2,
                 },
+                width: { xs: '100%', sm: 'auto' }
               }}
             >
               View All
