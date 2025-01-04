@@ -493,7 +493,7 @@ const CarListing = () => {
           { title: 'Fuel Type', options: ['electric', 'hybrid', 'petrol', 'diesel'] },
           { title: 'Transmission', options: ['automatic', 'manual'] },
           { title: 'Condition', options: ['new', 'used'] },
-        ].map((section, index) => (
+        ].map((section) => (
           <Box key={section.title} sx={{ mb: 3 }}>
             <Typography variant="subtitle1" gutterBottom color="text.primary" sx={{ fontWeight: 500 }}>
               {section.title}
